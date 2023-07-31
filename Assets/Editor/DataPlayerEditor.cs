@@ -10,6 +10,8 @@ public class DataPlayerEditor : Editor
     private SerializedProperty forceXProperty;
     private SerializedProperty forceYProperty;
     private SerializedProperty forceZProperty;
+    private SerializedProperty csvFileProperty;
+
 
     private void OnEnable()
     {
@@ -20,6 +22,7 @@ public class DataPlayerEditor : Editor
         forceXProperty = hapticControllerSerializedObject.FindProperty("forceX");
         forceYProperty = hapticControllerSerializedObject.FindProperty("forceY");
         forceZProperty = hapticControllerSerializedObject.FindProperty("forceZ");
+        csvFileProperty = serializedObject.FindProperty("csvFile"); // 추가된 부분
     }
 
     public override void OnInspectorGUI()
@@ -37,6 +40,16 @@ public class DataPlayerEditor : Editor
         EditorGUILayout.PropertyField(forceZProperty);
         hapticControllerSerializedObject.ApplyModifiedProperties();
 
+        // csvFileProperty가 null이 아닌지 확인 후 PropertyField로 표시합니다.
+        if (csvFileProperty != null)
+        {
+            EditorGUILayout.PropertyField(csvFileProperty);
+        }
+        else
+        {
+            Debug.LogError("csvFileProperty is null.");
+        }
+
         serializedObject.ApplyModifiedProperties();
 
         DataPlayer dataPlayer = (DataPlayer)target;
@@ -44,6 +57,10 @@ public class DataPlayerEditor : Editor
         if (GUILayout.Button("Play"))
         {
             dataPlayer.Play();
+        }
+        if (GUILayout.Button("Stop"))
+        {
+            dataPlayer.Stop();
         }
     }
 }
