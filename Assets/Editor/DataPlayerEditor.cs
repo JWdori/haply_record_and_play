@@ -11,12 +11,16 @@ public class DataPlayerEditor : Editor
     private SerializedProperty forceYProperty;
     private SerializedProperty forceZProperty;
     private SerializedProperty csvFileProperty;
+    private SerializedProperty testtargetObjectProperty;
+    private SerializedProperty testpositionProperty;
 
 
     private void OnEnable()
     {
         targetObjectProperty = serializedObject.FindProperty("targetObject");
         positionProperty = serializedObject.FindProperty("position");
+        testtargetObjectProperty = serializedObject.FindProperty("testtargetObject");
+        testpositionProperty = serializedObject.FindProperty("testposition");
         DataPlayer dataPlayer = (DataPlayer)target;
         hapticControllerSerializedObject = new SerializedObject(dataPlayer.hapticController);
         forceXProperty = hapticControllerSerializedObject.FindProperty("forceX");
@@ -33,6 +37,8 @@ public class DataPlayerEditor : Editor
 
         EditorGUILayout.PropertyField(targetObjectProperty);
         EditorGUILayout.PropertyField(positionProperty);
+        EditorGUILayout.PropertyField(testtargetObjectProperty);
+        EditorGUILayout.PropertyField(testpositionProperty);
 
         hapticControllerSerializedObject.Update();
         EditorGUILayout.PropertyField(forceXProperty);

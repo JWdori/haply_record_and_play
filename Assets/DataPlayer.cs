@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class DataPlayer : MonoBehaviour
 {
@@ -14,12 +16,18 @@ public class DataPlayer : MonoBehaviour
     private string[] lines; // CSV 파일의 라인들을 저장할 배열
     private int currentLineIndex = 1; // CSV 파일을 파싱할 때 현재 처리 중인 라인의 인덱스
 
+    [HideInInspector]
+    public GameObject testtargetObject;
+    [HideInInspector]
+    public Vector3 testposition; // 인스펙터에서 수정 가능한 포지션 변수
+
+    public TMP_Text UIText; //UI
 
 
     public float maxDistance = 0.2f; // 최대 거리
     public float maxForce = 1f; // 최대 힘
-    public AnimationCurve distanceCurve; // 거리에 따른 힘 피드백 곡선
-
+    //public AnimationCurve distanceCurve; // 거리에 따른 힘 피드백 곡선
+    //이거 필요 없을듯... 보간법인데
 
 
 
@@ -49,44 +57,22 @@ public class DataPlayer : MonoBehaviour
                 float.TryParse(data[7], out float velZ))
             {
                 Vector3 newPosition = new Vector3(posX, posY, posZ);
-                targetObject.transform.position = newPosition;
-                //Debug.Log(line+"\n"+"현재 힘피드백은"+ hapticController.forceX+ hapticController.forceY+ hapticController.forceZ);
-
-
-
-
-
-
-
-
-                // 두 위치 사이의 거리 계산
-                float distance = Vector3.Distance(targetObject.transform.position, transform.position);
-                // 최대 거리 이상이면 힘을 0으로 설정
-                if (distance >= maxDistance)
-                {
-                    hapticController.forceX = 1f;
-                    hapticController.forceY = 1f;
-                    hapticController.forceZ = 1f;
-                }
-                else
-                {
-                    // 거리에 따라 힘 피드백을 감쇠 함수를 사용하여 계산
-                    float normalizedDistance = distance / maxDistance;
-                    float dampingFactor = distanceCurve.Evaluate(normalizedDistance);
-                    hapticController.forceX = maxForce * dampingFactor * (posX - transform.position.x);
-                    hapticController.forceY = maxForce * dampingFactor * (posY - transform.position.y);
-                    hapticController.forceZ = maxForce * dampingFactor * (posZ - transform.position.z);
-                }
-
-                Debug.Log(distance);
-
-
-
+                testtargetObject.transform.position = newPosition;
+                Debug.Log(posX + "\n"+"현재 힘피드백은"+ hapticController.forceX+ hapticController.forceY+ hapticController.forceZ);
+                CalculateForce(newPosition,time);
 
             }
             else
             {
                 Debug.LogError("CSV ㄹ오류. 오류 데이터: " + line);
+            }
+            if (currentLineIndex >= lines.Length-1)
+            {
+                // CSV 파일의 끝까지 읽었으므로 힘 피드백을 0으로 초기화
+               hapticController.forceX = 0f;
+               hapticController.forceY = 0f;
+               hapticController.forceZ = 0f;
+                return;
             }
 
             currentLineIndex++;
@@ -94,6 +80,7 @@ public class DataPlayer : MonoBehaviour
 
         // 인스펙터에서 직접 수정한 포지션 값을 실시간으로 반영
         position = targetObject.transform.position;
+        //position = transform.position;
     }
 
     public void Play()
@@ -108,5 +95,51 @@ public class DataPlayer : MonoBehaviour
         hapticController.forceX = 0;
         hapticController.forceY = 0;
         hapticController.forceZ = 0;
+    }
+
+
+    private void CalculateForce(Vector3 targetPosition, float time)
+    {
+        Vector3 currentPosition = targetObject.transform.position;
+        Debug.Log(targetPosition.x + "CSV값");
+        Debug.Log(currentPosition.x+"실제값");
+        // X 좌표에 대한 힘 피드백 계산
+        float distanceX = Mathf.Abs(targetPosition.x - currentPosition.x);
+        float forceX = 0f;
+        if (distanceX < maxDistance)
+        {
+            float normalizedDistanceX = distanceX / maxDistance;
+            forceX = maxForce * (targetPosition.x - currentPosition.x) * (1f - normalizedDistanceX);
+        }
+
+        // Y 좌표에 대한 힘 피드백 계산
+        float distanceY = Mathf.Abs(targetPosition.y - currentPosition.y);
+        float forceY = 0f;
+        if (distanceY < maxDistance)
+        {
+            float normalizedDistanceY = distanceY / maxDistance;
+            forceY = maxForce * (targetPosition.y - currentPosition.y) * (1f - normalizedDistanceY);
+        }
+
+        // Z 좌표에 대한 힘 피드백 계산
+        float distanceZ = Mathf.Abs(targetPosition.z - currentPosition.z);
+        float forceZ = 0f;
+        if (distanceZ < maxDistance)
+        {
+            float normalizedDistanceZ = distanceZ / maxDistance;
+            forceZ = maxForce * (targetPosition.z - currentPosition.z) * (1f - normalizedDistanceZ);
+        }
+
+        // 힘 피드백 적용
+        hapticController.forceX = forceX;
+        hapticController.forceY = forceY;
+        hapticController.forceZ = forceZ;
+        UIText.text = time.ToString() + "\ndistanceX: " + distanceX.ToString() + "\ndistanceY: " + distanceY.ToString() +
+            "\ndistanceZ: " + distanceZ.ToString()
+            + "\nforceX: " + forceX.ToString() + "\nforceY: " + forceY.ToString() + "\nforceZ: " + forceZ.ToString()
+
+
+            ;
+
     }
 }
