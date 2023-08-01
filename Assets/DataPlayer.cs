@@ -14,9 +14,19 @@ public class DataPlayer : MonoBehaviour
     private string[] lines; // CSV 파일의 라인들을 저장할 배열
     private int currentLineIndex = 1; // CSV 파일을 파싱할 때 현재 처리 중인 라인의 인덱스
 
+
+
+    public float maxDistance = 0.2f; // 최대 거리
+    public float maxForce = 1f; // 최대 힘
+    public AnimationCurve distanceCurve; // 거리에 따른 힘 피드백 곡선
+
+
+
+
+
     private void Awake()
     {
-        // CSV 파일에서 데이터를 읽어와서 lines 배열에 저장합니다.
+        // CSV 파일에서 데이터를 읽어와서 lines 배열에 저장
         if (csvFile != null)
             lines = csvFile.text.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
     }
@@ -28,7 +38,7 @@ public class DataPlayer : MonoBehaviour
             string line = lines[currentLineIndex];
             string[] data = line.Split(new char[] { ',' });
 
-            // 데이터를 파싱하여 변수에 저장합니다.
+            // 데이터를 파싱하여 변수에 저장
             if (data.Length >= 8 &&
                 float.TryParse(data[1], out float time) &&
                 float.TryParse(data[2], out float posX) &&
@@ -40,20 +50,43 @@ public class DataPlayer : MonoBehaviour
             {
                 Vector3 newPosition = new Vector3(posX, posY, posZ);
                 targetObject.transform.position = newPosition;
-                Debug.Log(line);
-                // 여기서 hapticController.forceX 등 다른 동작을 수행할 수 있습니다.
-                if (hapticController.forceX == 0)
+                //Debug.Log(line+"\n"+"현재 힘피드백은"+ hapticController.forceX+ hapticController.forceY+ hapticController.forceZ);
+
+
+
+
+
+
+
+
+                // 두 위치 사이의 거리 계산
+                float distance = Vector3.Distance(targetObject.transform.position, transform.position);
+                // 최대 거리 이상이면 힘을 0으로 설정
+                if (distance >= maxDistance)
                 {
-                    hapticController.forceX = 0;
+                    hapticController.forceX = 1f;
+                    hapticController.forceY = 1f;
+                    hapticController.forceZ = 1f;
                 }
                 else
                 {
-                    hapticController.forceX = 1f;
+                    // 거리에 따라 힘 피드백을 감쇠 함수를 사용하여 계산
+                    float normalizedDistance = distance / maxDistance;
+                    float dampingFactor = distanceCurve.Evaluate(normalizedDistance);
+                    hapticController.forceX = maxForce * dampingFactor * (posX - transform.position.x);
+                    hapticController.forceY = maxForce * dampingFactor * (posY - transform.position.y);
+                    hapticController.forceZ = maxForce * dampingFactor * (posZ - transform.position.z);
                 }
+
+                Debug.Log(distance);
+
+
+
+
             }
             else
             {
-                Debug.LogError("CSV 데이터를 파싱하는 중 오류가 발생했습니다. 오류가 발생한 데이터: " + line);
+                Debug.LogError("CSV ㄹ오류. 오류 데이터: " + line);
             }
 
             currentLineIndex++;
@@ -73,5 +106,7 @@ public class DataPlayer : MonoBehaviour
     {
         startBtn = false;
         hapticController.forceX = 0;
+        hapticController.forceY = 0;
+        hapticController.forceZ = 0;
     }
 }
