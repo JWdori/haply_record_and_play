@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "co.haply.hardwareapi": "file:C:/Users/user/Downloads/co.haply.hardwareapi@1.1.5-preview (2).tar.gz",
+    "co.haply.hardwareapi": "file:C:/Users/user/Downloads/co.haply.hardwareapi@1.1.6-preview.tar.gz",
     "com.unity.collab-proxy": "2.0.3",
     "com.unity.feature.development": "1.0.1",
     "com.unity.ide.rider": "3.0.20",
@@ -42,5 +42,14 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Haply Robotics",
+      "url": "https://unitypackages.haply.co",
+      "scopes": [
+        "co.haply"
+      ]
+    }
+  ]
 }

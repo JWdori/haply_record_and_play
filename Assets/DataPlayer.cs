@@ -58,7 +58,7 @@ public class DataPlayer : MonoBehaviour
             {
                 Vector3 newPosition = new Vector3(posX, posY, posZ);
                 testtargetObject.transform.position = newPosition;
-                Debug.Log(posX + "\n"+"현재 힘피드백은"+ hapticController.forceX+ hapticController.forceY+ hapticController.forceZ);
+                //Debug.Log(posX + "\n"+"현재 힘피드백은"+ hapticController.forceX+ hapticController.forceY+ hapticController.forceZ);
                 CalculateForce(newPosition,time);
 
             }
@@ -66,14 +66,7 @@ public class DataPlayer : MonoBehaviour
             {
                 Debug.LogError("CSV ㄹ오류. 오류 데이터: " + line);
             }
-            if (currentLineIndex >= lines.Length-1)
-            {
-                // CSV 파일의 끝까지 읽었으므로 힘 피드백을 0으로 초기화
-               hapticController.forceX = 0f;
-               hapticController.forceY = 0f;
-               hapticController.forceZ = 0f;
-                return;
-            }
+
 
             currentLineIndex++;
         }
@@ -101,8 +94,8 @@ public class DataPlayer : MonoBehaviour
     private void CalculateForce(Vector3 targetPosition, float time)
     {
         Vector3 currentPosition = targetObject.transform.position;
-        Debug.Log(targetPosition.x + "CSV값");
-        Debug.Log(currentPosition.x+"실제값");
+        //Debug.Log(targetPosition.x + "CSV값");
+        //Debug.Log(currentPosition.x+"실제값");
         // X 좌표에 대한 힘 피드백 계산
         float distanceX = Mathf.Abs(targetPosition.x - currentPosition.x);
         float forceX = 0f;
@@ -130,16 +123,27 @@ public class DataPlayer : MonoBehaviour
             forceZ = maxForce * (targetPosition.z - currentPosition.z) * (1f - normalizedDistanceZ);
         }
 
-        // 힘 피드백 적용
-        hapticController.forceX = forceX;
-        hapticController.forceY = forceY;
-        hapticController.forceZ = forceZ;
+
+
+        if (currentLineIndex >= lines.Length - 1)
+        {
+            // CSV 파일의 끝까지 읽었으므로 힘 피드백을 0으로 초기화
+            hapticController.forceX = 0f;
+            hapticController.forceY = 0f;
+            hapticController.forceZ = 0f;
+            return;
+        }
+        else
+        {
+            // 힘 피드백 적용
+            hapticController.forceX = forceX;
+            hapticController.forceY = forceY;
+            hapticController.forceZ = forceZ;
+        }
         UIText.text = time.ToString() + "\ndistanceX: " + distanceX.ToString() + "\ndistanceY: " + distanceY.ToString() +
             "\ndistanceZ: " + distanceZ.ToString()
-            + "\nforceX: " + forceX.ToString() + "\nforceY: " + forceY.ToString() + "\nforceZ: " + forceZ.ToString()
+            + "\nforceX: " + forceX.ToString() + "\nforceY: " + forceY.ToString() + "\nforceZ: " + forceZ.ToString();
 
-
-            ;
 
     }
 }

@@ -412,6 +412,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &730749200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 730749202}
+  - component: {fileID: 730749201}
+  m_Layer: 0
+  m_Name: draw
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &730749201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730749200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fde8069947777d14daf8b3b8d3b5db79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 963194227}
+  defaultMaterial: {fileID: 2100000, guid: 32ef15c510cae0a459e4fc5c5f148c1f, type: 2}
+--- !u!4 &730749202
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730749200}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &780867137
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,8 +630,8 @@ MonoBehaviour:
   testtargetObject: {fileID: 526344321}
   testposition: {x: 0, y: 0, z: 0}
   UIText: {fileID: 1721948460}
-  maxDistance: 0.2
-  maxForce: 1
+  maxDistance: 1
+  maxForce: 5
 --- !u!4 &914855057
 Transform:
   m_ObjectHideFlags: 0
@@ -678,7 +724,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.01, z: -1.52}
+  m_LocalPosition: {x: 0, y: 0.01, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1001,14 +1047,14 @@ GameObject:
   - component: {fileID: 2143617909}
   - component: {fileID: 2143617908}
   - component: {fileID: 2143617907}
-  - component: {fileID: 2143617906}
+  - component: {fileID: 2143617910}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2143617905
 Transform:
   m_ObjectHideFlags: 0
@@ -1024,31 +1070,6 @@ Transform:
   m_Father: {fileID: 780867142}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2143617906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143617904}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb54fc783d2d3de4bbd3f1e67e2a0bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_CachedDeviceId: 61485
-  m_CachedDeviceName: 
-  m_CachedDeviceAddress: COM6
-  onButtonDown:
-    m_PersistentCalls:
-      m_Calls: []
-  onButtonUp:
-    m_PersistentCalls:
-      m_Calls: []
-  onInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  avatar: {fileID: 780867142}
 --- !u!65 &2143617907
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1112,3 +1133,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2143617904}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2143617910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143617904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb54fc783d2d3de4bbd3f1e67e2a0bd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CachedDeviceId: 61485
+  m_CachedDeviceName: 
+  m_CachedDeviceAddress: COM6
+  onButtonDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onButtonUp:
+    m_PersistentCalls:
+      m_Calls: []
+  onInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  avatar: {fileID: 780867142}

@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class HapticController : MonoBehaviour
 {
-    [Range(-5, 5)]
+    [Range(-2, 2)]
     public float forceX;
-    [Range(-5, 5)]
+    [Range(-2, 2)]
     public float forceY;
-    [Range(-5, 5)]
+    [Range(-2, 2)]
     public float forceZ;
 
     void Awake()
