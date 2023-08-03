@@ -1,10 +1,14 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Draw : MonoBehaviour
 {
     public Camera cam; // Main Camera 가져오기
     public Material defaultMaterial; // Line Renderer에 사용할 기본 머티리얼
+    public Transform movingObject; // 움직이는 오브젝트를 할당하기 위한 변수
 
     private LineRenderer curLine; // 현재 그려지고 있는 라인
     private int positionCount = 2; // 초기 시작과 끝 지점
@@ -13,7 +17,8 @@ public class Draw : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DrawMouse();
+        //DrawMouse();
+        //CheckObjectMovement();
     }
 
     void DrawMouse()
@@ -30,8 +35,7 @@ public class Draw : MonoBehaviour
         }
     }
 
-    // 라인을 생성하고 초기화하는 메서드
-    void createLine(Vector3 startPos)
+    public void createLine(Vector3 startPos)
     {
         positionCount = 2;
         GameObject line = new GameObject("Line");
@@ -52,8 +56,7 @@ public class Draw : MonoBehaviour
         PrevPos = startPos; // 라인 생성 시 이전 위치를 시작 위치로 설정
     }
 
-    // 라인을 연결하는 메서드
-    void connectLine(Vector3 mousePos)
+    public void connectLine(Vector3 mousePos)
     {
         if (PrevPos != mousePos && Mathf.Abs(Vector3.Distance(PrevPos, mousePos)) >= 0.001f)
         {
@@ -63,4 +66,6 @@ public class Draw : MonoBehaviour
             curLine.SetPosition(positionCount - 1, mousePos);
         }
     }
+
+
 }

@@ -18,7 +18,12 @@ public class MovingBallForce : MonoBehaviour
         public Vector3 ballPosition;
         public float ballRadius;
     }
-    
+    [Range(-2, 2)]
+    public float forceX;
+    [Range(-2, 2)]
+    public float forceY;
+    [Range(-2, 2)]
+    public float forceZ;
     [Range(0, 800)]
     public float stiffness = 600f;
     
@@ -86,12 +91,16 @@ public class MovingBallForce : MonoBehaviour
     private Vector3 ForceCalculation ( in Vector3 position, in Vector3 velocity, in AdditionalData additionalData )
     {
         var force = Vector3.zero;
-
         var distance = Vector3.Distance( position, additionalData.ballPosition );
         var penetration = additionalData.ballRadius + m_cursorRadius - distance;
         if ( penetration > 0 )
         {
             force = (position - additionalData.ballPosition) / distance * penetration * stiffness;
+            Debug.Log(force);
+        }
+        else
+        {
+            force = new Vector3(forceX, forceY, forceZ);
         }
 
         return force;

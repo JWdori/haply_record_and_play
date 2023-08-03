@@ -6,7 +6,9 @@ public class DataPlayer : MonoBehaviour
 {
     [HideInInspector]
     public GameObject targetObject; // 위치를 가져올 대상 오브젝트의 참조
-    public HapticController hapticController;
+    //public HapticController hapticController;
+    public PlaneForce hapticController;
+
     [HideInInspector]
     public Vector3 position; // 인스펙터에서 수정 가능한 포지션 변수
     private bool startBtn = false;
@@ -25,7 +27,7 @@ public class DataPlayer : MonoBehaviour
 
 
     public float maxDistance = 0.2f; // 최대 거리
-    public float maxForce = 1f; // 최대 힘
+    public float maxForce = 5f; // 최대 힘
     //public AnimationCurve distanceCurve; // 거리에 따른 힘 피드백 곡선
     //이거 필요 없을듯... 보간법인데
 
@@ -73,11 +75,13 @@ public class DataPlayer : MonoBehaviour
 
         // 인스펙터에서 직접 수정한 포지션 값을 실시간으로 반영
         position = targetObject.transform.position;
+        testposition = testtargetObject.transform.position;
         //position = transform.position;
     }
 
     public void Play()
     {
+        testtargetObject.SetActive(true);
         startBtn = true;
         currentLineIndex = 1; // 시작할 때 첫 번째 데이터 라인부터 처리하도록 초기화합니다.
     }

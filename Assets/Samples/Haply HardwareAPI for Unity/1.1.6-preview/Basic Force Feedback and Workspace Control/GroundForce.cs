@@ -6,7 +6,7 @@ namespace Haply.Samples.BasicForceFeedbackAndWorkspaceControl
     public class GroundForce : MonoBehaviour
     {
         [Range(0, 800)]
-        public float stiffness = 600f;
+        public float stiffness = 2f;
         [Range(0, 3)]
         public float damping = 1;
         
@@ -20,6 +20,15 @@ namespace Haply.Samples.BasicForceFeedbackAndWorkspaceControl
         // Workspace
         private float m_workspaceScale = 1;
         private float m_workspaceHeight;
+
+
+        [Range(-2, 2)]
+        public float forceX;
+        [Range(-2, 2)]
+        public float forceY;
+        [Range(-2, 2)]
+        public float forceZ;
+
 
         private void Start ()
         {
@@ -67,14 +76,16 @@ namespace Haply.Samples.BasicForceFeedbackAndWorkspaceControl
             var contactPoint = (position.y * m_workspaceScale) + m_workspaceHeight - m_cursorRadius;
             
             var penetration = m_groundHeight - contactPoint;
-            if ( penetration > 0 )
+            if (penetration > 0)
             {
                 force.y = penetration * stiffness - velocity.y * damping;
-                
+
                 // invert the offset scale to avoid stiffness relative to it
                 force.y /= m_workspaceScale;
             }
-            
+            else { 
+                force = new Vector3(forceX, forceY, forceZ);
+            }            
             return force;
         }
     }

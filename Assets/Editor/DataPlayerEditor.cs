@@ -63,6 +63,7 @@ public class DataPlayerEditor : Editor
         if (GUILayout.Button("Play"))
         {
             dataPlayer.Play();
+
         }
         if (GUILayout.Button("Stop"))
         {

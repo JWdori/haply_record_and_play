@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -186,7 +186,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 252272492}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &394439969
 MeshRenderer:
@@ -435,11 +435,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b077675e5fd53c34d84cbcc71c033353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DeviceAddress:
+  m_CachedHandedness: 1
+  m_CachedDeviceId: 1136
+  m_CachedDeviceName: Brass Accordion
+  m_CachedDeviceAddress: COM5
   avatar: {fileID: 394439967}
   m_TargetFrequency: 1000
-  hold: 0
-  m_PauseOnIOException: 0
+  onInitialized:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1914478959
 Transform:
   m_ObjectHideFlags: 0
@@ -464,10 +468,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1914478957}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08cf2fbbab52d5749b089d35e65cd543, type: 3}
+  m_Script: {fileID: 11500000, guid: b6e5ae8119b205c4699a6b1663570730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stiffness: 600
+  damping: 1
   ground: {fileID: 820301342}
 --- !u!1 &1979803444
 GameObject:
