@@ -6,8 +6,8 @@ public class DataPlayer : MonoBehaviour
 {
     [HideInInspector]
     public GameObject targetObject; // 위치를 가져올 대상 오브젝트의 참조
-    //public HapticController hapticController;
-    public PlaneForce hapticController;
+    public HapticController hapticController;
+    //public PlaneForce hapticController;
 
     [HideInInspector]
     public Vector3 position; // 인스펙터에서 수정 가능한 포지션 변수
@@ -26,8 +26,8 @@ public class DataPlayer : MonoBehaviour
     public TMP_Text UIText; //UI
 
 
-    public float maxDistance = 0.2f; // 최대 거리
-    public float maxForce = 5f; // 최대 힘
+    public float maxDistance = 1f; // 최대 거리
+    public float maxForce = 3f; // 최대 힘
     //public AnimationCurve distanceCurve; // 거리에 따른 힘 피드백 곡선
     //이거 필요 없을듯... 보간법인데
 
@@ -63,6 +63,7 @@ public class DataPlayer : MonoBehaviour
                 //Debug.Log(posX + "\n"+"현재 힘피드백은"+ hapticController.forceX+ hapticController.forceY+ hapticController.forceZ);
                 CalculateForce(newPosition,time);
 
+
             }
             else
             {
@@ -90,64 +91,52 @@ public class DataPlayer : MonoBehaviour
     {
         startBtn = false;
         hapticController.forceX = 0;
-        hapticController.forceY = 0;
+        hapticController.forceY = 0.2f; //기본 중력
         hapticController.forceZ = 0;
     }
 
 
-    private void CalculateForce(Vector3 targetPosition, float time)
+    private Vector3 CalculateForce(Vector3 targetPosition, float time)
     {
         Vector3 currentPosition = targetObject.transform.position;
-        //Debug.Log(targetPosition.x + "CSV값");
-        //Debug.Log(currentPosition.x+"실제값");
-        // X 좌표에 대한 힘 피드백 계산
-        float distanceX = Mathf.Abs(targetPosition.x - currentPosition.x);
-        float forceX = 0f;
-        if (distanceX < maxDistance)
-        {
-            float normalizedDistanceX = distanceX / maxDistance;
-            forceX = maxForce * (targetPosition.x - currentPosition.x) * (1f - normalizedDistanceX);
-        }
+        Vector3 distanceVector = targetPosition - currentPosition;
+        Vector3 normalizedDistanceVector = new Vector3(
+            Mathf.Clamp(distanceVector.x / maxDistance, -1f, 1f),
+            Mathf.Clamp(distanceVector.y / maxDistance, -1f, 1f),
+            Mathf.Clamp(distanceVector.z / maxDistance, -1f, 1f)
+        );
 
-        // Y 좌표에 대한 힘 피드백 계산
-        float distanceY = Mathf.Abs(targetPosition.y - currentPosition.y);
-        float forceY = 0f;
-        if (distanceY < maxDistance)
-        {
-            float normalizedDistanceY = distanceY / maxDistance;
-            forceY = maxForce * (targetPosition.y - currentPosition.y) * (1f - normalizedDistanceY);
-        }
-
-        // Z 좌표에 대한 힘 피드백 계산
-        float distanceZ = Mathf.Abs(targetPosition.z - currentPosition.z);
-        float forceZ = 0f;
-        if (distanceZ < maxDistance)
-        {
-            float normalizedDistanceZ = distanceZ / maxDistance;
-            forceZ = maxForce * (targetPosition.z - currentPosition.z) * (1f - normalizedDistanceZ);
-        }
-
-
-
+        Vector3 forceVector = maxForce * Vector3.Scale(distanceVector, (Vector3.one - normalizedDistanceVector));
+        forceVector = new Vector3(
+            Mathf.Abs(distanceVector.x) < maxDistance ? forceVector.x : maxForce * Mathf.Sign(distanceVector.x),
+            Mathf.Abs(distanceVector.y) < maxDistance ? forceVector.y : maxForce * Mathf.Sign(distanceVector.y),
+            Mathf.Abs(distanceVector.z) < maxDistance ? forceVector.z : maxForce * Mathf.Sign(distanceVector.z)
+        );
+        Debug.Log(forceVector);
         if (currentLineIndex >= lines.Length - 1)
         {
             // CSV 파일의 끝까지 읽었으므로 힘 피드백을 0으로 초기화
-            hapticController.forceX = 0f;
-            hapticController.forceY = 0f;
-            hapticController.forceZ = 0f;
-            return;
+            hapticController.forceX = 0;
+            hapticController.forceY = 0.2f; //기본 중력
+            hapticController.forceZ = 0;
         }
         else
         {
-            // 힘 피드백 적용
-            hapticController.forceX = forceX;
-            hapticController.forceY = forceY;
-            hapticController.forceZ = forceZ;
+            hapticController.forceX = forceVector.x;
+            hapticController.forceY = forceVector.y;
+            hapticController.forceZ = forceVector.z;
         }
-        UIText.text = time.ToString() + "\ndistanceX: " + distanceX.ToString() + "\ndistanceY: " + distanceY.ToString() +
-            "\ndistanceZ: " + distanceZ.ToString()
-            + "\nforceX: " + forceX.ToString() + "\nforceY: " + forceY.ToString() + "\nforceZ: " + forceZ.ToString();
 
 
+        UIText.text = time.ToString()
+            + "\ndistanceX: " + distanceVector.x
+            + "\ndistanceY: " + distanceVector.y
+            + "\ndistanceZ: " + distanceVector.z
+            + "\nforceX: " + forceVector.x
+            + "\nforceY: " + forceVector.y
+            + "\nforceZ: " + forceVector.z;
+
+        return forceVector;
     }
+
 }

@@ -1,0 +1,4 @@
+Frame,Time,Cursor Position X,Cursor Position Y,Cursor Position Z,Cursor Velocity X,Cursor Velocity Y,Cursor Velocity Z
+1,0,0,0,0,0,0,0
+2,0.02,0,0,0,0,0,0
+3,0.2987178,0.08060694,0.1539039,-0.09809376,0.0001377288,0.0001377288,-0.0003269011

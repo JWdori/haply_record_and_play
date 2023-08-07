@@ -21,19 +21,7 @@ public class Draw : MonoBehaviour
         //CheckObjectMovement();
     }
 
-    void DrawMouse()
-    {
-        Vector3 mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0.3f));
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            createLine(mousePos);
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            connectLine(mousePos);
-        }
-    }
 
     public void createLine(Vector3 startPos)
     {

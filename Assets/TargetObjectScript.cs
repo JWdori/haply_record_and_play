@@ -12,11 +12,11 @@ public class TargetObjectScript : MonoBehaviour
         drawScript = FindObjectOfType<Draw>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
 
         // 충돌한 오브젝트가 "paper" 태그를 가지고 있고, Draw 스크립트가 존재할 경우
-        if (other.tag == "paper" && drawScript != null)
+        if (collision.gameObject.CompareTag("paper"))
         {
             Vector3 objectPosition = transform.position;
             drawScript.createLine(objectPosition); // Draw 스크립트의 createLine 함수를 호출합니다.
@@ -24,14 +24,13 @@ public class TargetObjectScript : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnCollisionStay(Collision collision)
     {
         // 충돌하고 있는 오브젝트가 "paper" 태그를 가지고 있고, Draw 스크립트가 존재할 경우
-        if (other.tag == "paper" && drawScript != null)
+        if (collision.gameObject.CompareTag("paper"))
         {
             Vector3 objectPosition = transform.position;
             drawScript.connectLine(objectPosition); // Draw 스크립트의 connectLine 함수를 호출합니다.
-            //Debug.Log("충돌 중");
         }
     }
 }
