@@ -1,0 +1,2 @@
+*.HLSL linguist-detectable=false
+*.SharderLab linguist-detectable=false 
